@@ -1,32 +1,49 @@
 class Solution {
 public:
     string convert(string s, int numRows) {
-        vector<string> answer(numRows,"");
-        if(numRows==1) return s;
-        int index = 0;
-        int ptr = 0;
-        int size = s.size();
-        while(index < size){
-            int i;
-            for(i=index;i<index+numRows;i++){
-                if(i<=size-1){
-                    answer[ptr] += s[i];
-                    ptr++;
-                }else break;
-            }
-            index = i; ptr-=2;
-            while(index<size && ptr>0){
-                answer[ptr] += s[index];
-                index++;
-                ptr--;
-            }
-        }
-        string final_string = "";
-        for(auto item:answer){
-            cout<<item<<" ";
-            final_string += item;
+        if (numRows == 1) {
+            return s;
         }
         
-        return final_string;
+        int n = int(s.size());
+        int sections = ceil(n / (2 * numRows - 2.0));
+        int numCols = sections * (numRows - 1);
+        
+        vector<vector<char>> matrix(numRows, vector<char>(numCols, ' '));
+        
+        int currRow = 0, currCol = 0;
+        int currStringIndex = 0;
+        
+        // Iterate in zig-zag pattern on matrix and fill it with string characters.
+        while (currStringIndex < n) {
+            // Move down.
+            while (currRow < numRows && currStringIndex < n) {
+                matrix[currRow][currCol] = s[currStringIndex];
+                currRow++;
+                currStringIndex++;
+            }
+            
+            currRow -= 2;
+            currCol++;
+            
+            // Move up (with moving right also).
+            while (currRow > 0 && currCol < numCols && currStringIndex < n) {
+                matrix[currRow][currCol] = s[currStringIndex];
+                currRow--;
+                currCol++;
+                currStringIndex++;
+            }
+        }
+        
+        string answer;
+        for (auto& row: matrix) {
+            for (auto& character: row) {
+                if (character != ' ') {
+                    answer += character;
+                }
+            }
+        }
+        
+        return answer;
     }
 };
