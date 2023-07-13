@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
-   TreeNode* firstMistake, *secondMistake, *pre;
+      TreeNode* firstMistake, *secondMistake, *pre;
 	void recoverTree(TreeNode* root) {
 		pre = new TreeNode(INT_MIN);
 		inorder(root);
